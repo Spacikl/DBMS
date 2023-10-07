@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace DBMS.Domain
 {
-    public class StudentVariant
+    public class Mark
     {
         public int Id { get; set; }
-        public int StudentId { get; set; }
-        public int VariantId { get; set; }
+        public int Mark_ { get; set; }
     }
 }

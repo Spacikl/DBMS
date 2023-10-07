@@ -8,8 +8,9 @@ namespace DBMS.Domain
 {
     public class StudentVariantMark
     {
+        public int Id { get; set; }
         public string FullName { get; set; }
-        public string PathToFile { get; set; }
+        public string Path { get; set; }
         public int Mark { get; set; }
     }
 }

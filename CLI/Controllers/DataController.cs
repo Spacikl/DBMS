@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBMS.Domain
+namespace Main.Controllers
 {
-    public class Variant
+    public class DataController
     {
-        public int Id { get; set; }
-        public string PathToFile { get; set; }
     }
 }

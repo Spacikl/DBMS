@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+
+<html>
+<body>
+    <h2>@ViewBag.Title</h2>
+    <div> 
+            <h2>Опции: </h2>
+            <ol>
+                <li><a href="/Db/ShowAllDataBases">Показать все DB</a></li>
+                <li><a href="/Db/ShowCurrentDataBase">Показать выбранную DB</a></li>
+                <li><a href="/Db/CreateDataBase">Создать новую DB</a></li>
+                <li><a href="/Db/OpenDataBase">Открыть DB</a></li>
+                <li><a href="/Db/DeleteDataBase">Удалить DB</a></li>
+                <li><a href="/Db/SwitchDataBase">Сменить DB</a></li>
+            </ol>
+    </div>
+    <div>@RenderBody()</div>
+</body>
+</html>

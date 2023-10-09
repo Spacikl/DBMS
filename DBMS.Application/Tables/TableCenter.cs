@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DBMS.Application.Tables
@@ -47,11 +48,13 @@ namespace DBMS.Application.Tables
 
         public string FindById(int id)
         {
-            var entity = File.ReadAllLines(Path)
-                .Where(e => e.Split(' ')
-                .ToList()
-                .First() == id.ToString()).ToString();
-            return entity;
+            var entity = File.ReadLines(Path)
+                .Where(x => x.Split(' ').ToList().First() == id.ToString());
+
+            if (entity.Count() == 0)
+                return new string($"Не найдено :( ");
+
+            return entity.First();
         }
 
         public List<string> GetAll()

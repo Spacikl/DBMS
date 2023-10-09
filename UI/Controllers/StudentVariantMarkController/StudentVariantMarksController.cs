@@ -22,10 +22,7 @@ namespace UI.Controllers.StudentVariantMarkController
                 .DataBase
                 .StudentVariantMarks.GetAll();
 
-            return View(fullTable);   
-
+            return View(fullTable);
         }
-
-
     }
 }

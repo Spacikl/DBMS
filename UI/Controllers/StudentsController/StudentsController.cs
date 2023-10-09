@@ -56,5 +56,19 @@ namespace UI.Controllers.StudentController
             return Redirect("~/Students/ShowAllStudents");
         }
 
+        [HttpGet]
+        public IActionResult GetStudentById()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetStudentById(string id)
+        {
+            var foundStudent = _applicationDbContext.DataBase.Students.FindById(int.Parse(id));
+            return View("ShowCurrentStudent", foundStudent);
+        }
+
+
     }
 }

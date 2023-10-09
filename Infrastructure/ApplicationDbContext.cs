@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -116,6 +117,53 @@ namespace Infrastructure
                 return string.Empty;
             }
             return DataBase.PathToDataBase;
+        }
+
+        public void GenerateTable()
+        {
+            if (DataBase == null)
+            {
+                Console.WriteLine("Не выбрана ни одна бд");
+                return;
+            }
+            var dbStudents = DataBase.Students.GetAll();
+            var dbVariants = DataBase.Variants.GetAll();
+
+            Shuffle(dbVariants);
+            
+            var generatedList = new List<string>();
+            var completedList = new List<string>();
+            if (dbStudents.Count > 0 && dbVariants.Count > 0)
+            {
+                int j = 0;
+                for (int i = 0; i < dbStudents.Count; i++)
+                {
+                    if (i >= dbVariants.Count)
+                        j = 0;
+                    
+                    var parseVar = dbVariants[j].Split(' ');
+                    var parseStudent = dbStudents[i].Split(' ');
+                    generatedList.Add(parseStudent.First() + " " + parseVar.First());
+                    completedList.Add($"{parseStudent[1]} {parseStudent[2]}\t {parseVar[1]}\t {0}");
+                    j++;
+                }
+            }
+            File.WriteAllLines(DataBase.StudentVariants.Path, generatedList);
+            File.WriteAllLines(DataBase.StudentVariantMarks.Path, completedList);
+        }
+
+        public void Shuffle(List<string> array)
+        {
+            if (array.Count < 1)
+                return;
+            var random = new Random();
+            for (int i = 0; i < array.Count; i++)
+            {
+                var key = array[i];
+                var rnd = random.Next(i, array.Count);
+                array[i] = array[rnd];
+                array[rnd] = key;
+            }
         }
     }
 }

@@ -15,5 +15,7 @@ namespace Infrastructure
         public void OpenDataBase(string dbName);
         public List<string> ShowAllDataBases();
         public string ShowCurrentDataBase();
+        public void GenerateTable();
+        public void Shuffle(List<string> array);
     }
 }

@@ -10,10 +10,4 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\StudentVariantMarkController\" />
-    <Folder Include="Controllers\StudentVariantController\" />
-    <Folder Include="Controllers\VariantController\" />
-  </ItemGroup>
-
 </Project>

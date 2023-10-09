@@ -17,20 +17,12 @@ namespace Infrastructure
         public DataBase(string path)
         { 
             PathToDataBase = path;
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
             Students = new StudentTable(Path.Combine(path, "DbStudents.txt"));
             Variants = new VariantTable(Path.Combine(path, "DbVariants.txt"));
             StudentVariants = new StudentVariantTable(Path.Combine(path, "DbStudentVariants.txt"));
             StudentVariantMarks = new StudentVariantMarkTable(Path.Combine(path, "DbStudentVariantMarks.txt"));
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
-            if (!File.Exists(Students.Path)) 
-                File.Create(Students.Path).Close();
-            if (!File.Exists(Variants.Path)) 
-                File.Create(Variants.Path).Close();
-            if (!File.Exists(StudentVariants.Path)) 
-                File.Create(StudentVariants.Path).Close();
-            if (!File.Exists(StudentVariantMarks.Path)) 
-                File.Create(StudentVariantMarks.Path).Close();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DBMS.Application.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -12,11 +13,24 @@ namespace DBMS.Application.Tables
 {
     public class TableCenter<T> : ITable<T>
     {
+        public int IdIndex = 0;
 
         public string Path { get; set; }
         public TableCenter(string path)
         {
-            Path = path;
+                Path = path;
+            if (!File.Exists(Path))
+                File.Create(Path).Close();
+            //else UpdateIndex();
+        }
+
+        private void UpdateIndex()
+        {
+            var lastLine = File.ReadAllLines(Path).Last();
+            IdIndex = int.Parse(lastLine
+                .Split(' ')
+                .ToList()
+                .First());
         }
 
         public async void Add(string entity)
@@ -26,23 +40,23 @@ namespace DBMS.Application.Tables
               
             //var parsedClass = ParseClass(entity);
 
-            File.AppendAllText(Path, entity + "\n");
+            File.AppendAllText(Path, IdIndex + " " + entity + "\n");
+            IdIndex++;
         }
 
 
-        //public async void DeleteById(T entity, string path,
-        //    CancellationToken cancellationToken)
-        //{
-        //    if (path == null || entity == null)
-        //        throw new ArgumentNullException();
+        public string FindById(int id)
+        {
+            var entity = File.ReadAllLines(Path)
+                .Where(e => e.Split(' ')
+                .ToList()
+                .First() == id.ToString()).ToString();
+            return entity;
+        }
 
-        //    var parsedEntity = ParseClass(entity);
-
-        //    await File.WriteAllLinesAsync(path,
-        //        File.ReadAllLines(path)
-        //        .Where(e => e != parsedEntity)
-        //        .ToList(), cancellationToken);
-        //}
+        public List<string> GetAll()
+            => File.ReadAllLines(Path).ToList();
+        
 
         public async void DeleteById(int id,
             CancellationToken cancellationToken)
@@ -55,26 +69,21 @@ namespace DBMS.Application.Tables
                 .ToList(), cancellationToken);
         }
 
-        //public T FindById(int id, string path, CancellationToken cancellationToken)
-        //{
-        //    var entity = File.ReadAllLines(path)
-        //        .Where(e => e.Split(' ')
-        //            .ToList()
-        //            .First() == id.ToString());
-        //    var ent = Activator.CreateInstance(Assembly.GetCallingAssembly().FullName, nameof(T));
-
-        //}
-
-        public async void UpdateById(int id, string entity, CancellationToken cancellationToken)
+        
+        public async void UpdateById(int id, string entity,
+            CancellationToken cancellationToken)
         {
-            await File.WriteAllLinesAsync(Path,
-                File.ReadAllLines(Path)
-                .Where(e => e.Split(' ')
-                .ToList()
-                .First() != id.ToString())
-                .ToList(), cancellationToken);
-
-            File.AppendAllText(Path, entity);
+            var allData = File.ReadAllLines(Path);
+            for (int i = 0; i < allData.Length; i++)
+            {
+                if (allData[i].Split(' ').First() == id.ToString())
+                {
+                    allData[i] = id.ToString() + " " + entity;
+                    break;
+                }
+            }
+            File.Delete(Path);
+            File.AppendAllLines(Path,allData);
         }
 
         public string ParseClass(T entity)

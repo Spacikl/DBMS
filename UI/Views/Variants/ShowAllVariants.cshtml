@@ -1,0 +1,14 @@
+﻿@model List<string>
+@{
+    Layout = "/Views/Shared/_LayoutVariant.cshtml";
+}
+
+<body>
+    <h2>Все варианты</h2>
+    <ol>
+        @foreach (var st in Model)
+        {
+            <li>@st</li>
+        }
+    </ol>
+</body>

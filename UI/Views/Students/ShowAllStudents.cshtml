@@ -1,0 +1,14 @@
+﻿@model List<string>
+@{
+    Layout = "/Views/Shared/_LayoutStudent.cshtml";
+}
+
+<body>
+    <h2>Все студенты</h2>
+    <ol>
+        @foreach (var st in Model)
+        {
+            <li>@st</li>
+        }
+    </ol>
+</body>

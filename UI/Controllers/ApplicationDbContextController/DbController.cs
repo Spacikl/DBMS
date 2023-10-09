@@ -81,5 +81,28 @@ namespace UI.Controllers.ApplicationDbContextController
             _applicationDbContext.OpenDataBase(name);
             return Redirect("~/Db/ShowAllDataBases");
         }
+
+        public IActionResult Students()
+        {
+            if (_applicationDbContext.DataBase == null)
+                return Redirect("~/Db/ShowAllDataBases");
+            return Redirect("~/Students/ShowAllStudents");
+        }
+        public IActionResult Variants()
+        {
+            if (_applicationDbContext.DataBase == null)
+                return Redirect("~/Db/ShowAllDataBases");
+            return Redirect("~/Variants/ShowAllVariants");
+        }
+        public IActionResult StudentsVariants()
+        {
+            if (_applicationDbContext.DataBase == null)
+                return Redirect("~/Db/ShowAllDataBases");
+            return Redirect("~/StudentVariants/StudentVariantsCreate");
+        }
+        public IActionResult StudentsVariantsMarks()
+        {
+            return Redirect("~/StudentsVariantsMarks/ShowAllStudentsVariantMarks");
+        }
     }
 }

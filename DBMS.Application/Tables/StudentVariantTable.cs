@@ -11,5 +11,6 @@ namespace DBMS.Domain
     {
         public List<StudentVariant> StudentVariants { get; set; } = new();
         public StudentVariantTable(string path) : base(path){ }
+
     }
 }

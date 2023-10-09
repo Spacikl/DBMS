@@ -13,5 +13,7 @@ namespace DBMS.Application.Interfaces
         public void DeleteById(int id, CancellationToken cancellationToken);
         public void Add(string entity);
         public void UpdateById(int id, string entity, CancellationToken cancellationToken);
+        public string FindById(int id);
+        public List<string> GetAll();
     }
 }

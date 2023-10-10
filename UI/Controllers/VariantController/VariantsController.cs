@@ -57,7 +57,8 @@ namespace UI.Controllers.VariantController
                 if (student[0] != "Не")
                 {
                     _applicationDbContext.DataBase
-                        .StudentVariantMarks.DeleteStudentsVariant(student[1], student[2], student[3]);
+                        .StudentVariantMarks
+                        .DeleteStudentsVariant(student[1], student[2], student[3]);
                 }
             }
             return Redirect("~/Variants/ShowAllVariants");
@@ -70,7 +71,25 @@ namespace UI.Controllers.VariantController
         [HttpPost]
         public IActionResult UpdateVariantByid(string id, string pathToFile)
         {
-            _applicationDbContext.DataBase.Variants.UpdateById(id, pathToFile, new CancellationToken());
+            _applicationDbContext.DataBase.Variants
+                .UpdateById(id, pathToFile, new CancellationToken());
+            
+            var studentListId = _applicationDbContext.DataBase.StudentVariants
+                .FindStudentsByVariantIdUpdate(id);
+
+            if (studentListId.Count() == 0)
+                return Redirect("~/Variants/ShowAllVariants");
+
+            foreach (var _id in studentListId)
+            {
+                var student = _applicationDbContext.DataBase.Students
+                    .FindById(_id);
+                if (student != "Не найдено :(")
+                {
+                    _applicationDbContext.DataBase.StudentVariantMarks
+                        .UpdateStudentVariant(student, pathToFile);
+                }
+            }
             return Redirect("~/Variants/ShowAllVariants");
         }
     }

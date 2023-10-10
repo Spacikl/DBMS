@@ -17,5 +17,6 @@ namespace Infrastructure
         public string ShowCurrentDataBase();
         public void GenerateTable();
         public void Shuffle(List<string> array);
+        public void AutoFill(string path_to_name, string path_to_var);
     }
 }

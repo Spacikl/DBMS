@@ -41,6 +41,20 @@ namespace DBMS.Domain
             File.WriteAllLines(Path, allData.Where(x => x != "-1"));
             return studentIdList;
         }
+        public List<string> FindStudentsByVariantIdUpdate(string id)
+        {
+            var allData = File.ReadAllLines(Path).ToList();
+            var studentIdList = new List<string>();
+
+            for (int i = 0; i < allData.Count; i++)
+            {
+                var parsedData = allData[i].Split(' ').ToList();
+                if (parsedData[1] == id)
+                    studentIdList.Add(parsedData[0]);
+                
+            }
+            return studentIdList;
+        }
     }
 
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DBMS.Domain
 {
@@ -85,6 +86,52 @@ namespace DBMS.Domain
             }
             File.Delete(Path);
             File.AppendAllLines(Path, allData);
+        }
+        public void UpdateStudent(string notUpdatedStudent, string updatedStudent)
+        {
+            var parsedNotUpdatedStudent = notUpdatedStudent.Split(' ').Skip(1).ToList();
+            var findByFullName = string.Join(" ", parsedNotUpdatedStudent);
+            var allData = File.ReadAllLines(Path);
+            var parsedUpdatedStudent = updatedStudent.Split(' ').ToList();
+            for (int i = 0; i < allData.Length; i++)
+            {
+                var parsedData = allData[i].Split(' ').ToList();
+                if (allData[i].Contains(findByFullName))
+                {
+                    parsedData[0] = parsedUpdatedStudent[0];
+                    parsedData[1] = parsedUpdatedStudent[1];
+                    parsedData[2] = parsedUpdatedStudent[2];
+                    allData[i] = string.Join(" ",parsedData);
+                    break;
+                }
+            }
+            File.WriteAllLines(Path, allData);
+        }
+        public void UpdateStudentVariant(string student, string var)
+        {
+            var allData = File.ReadAllLines(Path);
+
+            if (allData.Count() == 0)
+            {
+                Console.WriteLine("Таблица пуста");
+                return;
+            }
+            var parsedStudentWithId = student.Split(' ').Skip(1).ToList();
+            var parsedStudent = string.Join(" ", parsedStudentWithId);
+
+            for (int i = 0; i < allData.Length; i++)
+            {
+                if (allData[i].Contains(parsedStudent))
+                {
+                    var parsedData = allData[i].Split(' ');
+                    parsedData[parsedData.Length - 1 - 23] = var;
+                    allData[i] = string.Join(" ", parsedData);
+                    break;
+                }
+            }
+            File.Delete(Path);
+            File.AppendAllLines(Path, allData);
+
         }
     }
 }

@@ -139,8 +139,10 @@ namespace Infrastructure
                 for (int i = 0; i < dbStudents.Count; i++)
                 {
                     if (i >= dbVariants.Count)
+                    {
                         j = 0;
-
+                        Shuffle(dbVariants);
+                    }
                     var parseVar = dbVariants[j].Split(' ');
                     var parseStudent = dbStudents[i].Split(' ');
                     var fullname = parseStudent[1] + " " + parseStudent[2] + " " + parseStudent[3];
@@ -166,6 +168,24 @@ namespace Infrastructure
                 array[i] = array[rnd];
                 array[rnd] = key;
             }
+        }
+
+        public void AutoFill(string path_to_name, string path_to_var)
+        {   
+            if (!File.Exists(path_to_name) || !File.Exists(path_to_var) || DataBase == null)
+                return;
+
+            var name_data = File.ReadAllLines(path_to_name).ToList();
+            var var_data = File.ReadAllLines(path_to_var).ToList();
+
+            foreach ( var name in name_data )
+                DataBase.Students.Add(name);
+
+            foreach (var var in var_data)
+                DataBase.Variants.Add(var);
+
+            GenerateTable();
+
         }
     }
 }

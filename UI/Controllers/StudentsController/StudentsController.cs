@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
 
 namespace UI.Controllers.StudentController
 {
@@ -64,7 +65,21 @@ namespace UI.Controllers.StudentController
         [HttpPost]
         public IActionResult UpdateStudentById(string id, string name, string surname, string patronymic)
         {
-            _applicationDbContext.DataBase.Students.UpdateById(id, name + " " + surname + " " + patronymic, new CancellationToken());
+            var updatedStudent = name + " " + surname + " " + patronymic;
+
+            var notUpdatedStudent = _applicationDbContext.DataBase.Students.FindById(id);
+            if (notUpdatedStudent == "Не найдено: (")
+            {
+                Console.WriteLine("Такого студента нет");
+                return Redirect("~/Students/ShowAllStudents");
+            }
+
+            _applicationDbContext.DataBase.Students
+                .UpdateById(id, updatedStudent, new CancellationToken());
+
+            _applicationDbContext.DataBase.StudentVariantMarks
+                .UpdateStudent(notUpdatedStudent, updatedStudent);
+
             return Redirect("~/Students/ShowAllStudents");
         }
 

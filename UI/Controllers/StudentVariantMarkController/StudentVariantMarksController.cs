@@ -24,5 +24,20 @@ namespace UI.Controllers.StudentVariantMarkController
 
             return View(fullTable);
         }
+
+        [HttpGet]
+        public IActionResult AddMark()
+        {
+            if (_applicationDbContext.DataBase == null)
+                return Redirect("~/Db/ShowAllDataBases");
+            return View("AddMark");
+        }
+        [HttpPost]
+        public IActionResult AddMark(string student, string mark)
+        {
+            _applicationDbContext.DataBase.StudentVariantMarks.AddMark(student, mark);
+            return Redirect("~/StudentVariantMarks/ShowFullTable");
+        }
+
     }
 }

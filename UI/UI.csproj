@@ -10,4 +10,16 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\StudentVariantMarks\AddMark.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\StudentVariantMarks\AddMark.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\StudentVariantMarks\AddMark.cshtml" />
+  </ItemGroup>
+
 </Project>

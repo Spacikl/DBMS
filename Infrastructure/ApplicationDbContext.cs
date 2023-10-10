@@ -140,16 +140,17 @@ namespace Infrastructure
                 {
                     if (i >= dbVariants.Count)
                         j = 0;
-                    
+
                     var parseVar = dbVariants[j].Split(' ');
                     var parseStudent = dbStudents[i].Split(' ');
+                    var fullname = parseStudent[1] + " " + parseStudent[2] + " " + parseStudent[3];
                     generatedList.Add(parseStudent.First() + " " + parseVar.First());
-                    completedList.Add($"{parseStudent[1]} {parseStudent[2]}\t {parseVar[1]}\t {0}");
+                    completedList.Add($"{fullname,-24} | \t {parseVar[1],-24} | \t {0}");
                     j++;
                 }
+                File.WriteAllLines(DataBase.StudentVariants.Path, generatedList);
+                File.AppendAllLines(DataBase.StudentVariantMarks.Path, completedList);
             }
-            File.WriteAllLines(DataBase.StudentVariants.Path, generatedList);
-            File.WriteAllLines(DataBase.StudentVariantMarks.Path, completedList);
         }
 
         public void Shuffle(List<string> array)

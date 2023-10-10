@@ -1,7 +1,9 @@
 ﻿using DBMS.Application.Interfaces;
+using DBMS.Domain;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -21,28 +23,37 @@ namespace DBMS.Application.Tables
         {
                 Path = path;
             if (!File.Exists(Path))
+            {
                 File.Create(Path).Close();
-            //else UpdateIndex();
+                if (typeof(T) == typeof(StudentVariantMark))
+                    File.AppendAllText(Path, "FullName\t\t\t Path to File\t\t\t Mark\n");
+            }
+            else UpdateIndex();
         }
 
         private void UpdateIndex()
         {
             var lastLine = File.ReadAllLines(Path).Last();
-            IdIndex = int.Parse(lastLine
-                .Split(' ')
-                .ToList()
-                .First());
+            var id = int.TryParse(lastLine.Split(' ').First(), out int index);
+            if (id) { 
+                IdIndex = index + 1;
+            }
         }
 
         public async void Add(string entity)
         {
             if (entity == null)
                 throw new ArgumentNullException();
-              
-            //var parsedClass = ParseClass(entity);
 
-            File.AppendAllText(Path, IdIndex + " " + entity + "\n");
-            IdIndex++;
+            if (CheckUnique(entity))
+            {
+                File.AppendAllText(Path, IdIndex + " " + entity + "\n");
+                IdIndex++;
+            }
+            else
+            {
+                Console.WriteLine("Такая сущность уже есть!");
+            }
         }
 
 
@@ -57,6 +68,7 @@ namespace DBMS.Application.Tables
             return entity.First();
         }
 
+        
         public List<string> GetAll()
             => File.ReadAllLines(Path).ToList();
         
@@ -77,16 +89,20 @@ namespace DBMS.Application.Tables
             CancellationToken cancellationToken)
         {
             var allData = File.ReadAllLines(Path);
-            for (int i = 0; i < allData.Length; i++)
+            if (CheckUnique(entity))
             {
-                if (allData[i].Split(' ').First() == id.ToString())
+                for (int i = 0; i < allData.Length; i++)
                 {
-                    allData[i] = id.ToString() + " " + entity;
-                    break;
+                    if (allData[i].Split(' ').First() == id.ToString())
+                    {
+                        allData[i] = id.ToString() + " " + entity;
+                        break;
+                    }
                 }
+                File.Delete(Path);
+                File.AppendAllLines(Path, allData);
             }
-            File.Delete(Path);
-            File.AppendAllLines(Path,allData);
+            else Console.WriteLine("Такой элемент уже есть");
         }
 
         public string ParseClass(T entity)
@@ -103,6 +119,17 @@ namespace DBMS.Application.Tables
 
             var str = string.Join(" ", propertiesList);
             return str;
+        }
+
+        public bool CheckUnique(string data)
+        {
+            var allData = File.ReadAllLines(Path);
+            foreach (var str in allData)
+            {
+                if (str.Contains(data))
+                    return false;
+            }
+            return true;
         }
     }
 }

@@ -15,5 +15,6 @@ namespace DBMS.Application.Interfaces
         public void UpdateById(int id, string entity, CancellationToken cancellationToken);
         public string FindById(int id);
         public List<string> GetAll();
+        public bool CheckUnique(string data);
     }
 }

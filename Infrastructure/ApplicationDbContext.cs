@@ -149,6 +149,7 @@ namespace Infrastructure
                     j++;
                 }
                 File.WriteAllLines(DataBase.StudentVariants.Path, generatedList);
+                File.WriteAllText(DataBase.StudentVariantMarks.Path, "FullName\t\t\t Path to File\t\t\t Mark\n");
                 File.AppendAllLines(DataBase.StudentVariantMarks.Path, completedList);
             }
         }

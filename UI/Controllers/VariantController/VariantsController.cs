@@ -35,9 +35,31 @@ namespace UI.Controllers.VariantController
         public IActionResult DeleteVariantById()
             => View();
         [HttpPost]
-        public IActionResult DeleteVariantById(int id)
+        public IActionResult DeleteVariantById(string id)
         {
-            _applicationDbContext.DataBase.Variants.DeleteById(id, new CancellationToken());
+            //удаляем варианты в таблице Вариантов
+            
+            _applicationDbContext.DataBase
+                .Variants.DeleteById(id, new CancellationToken());
+            
+            //найти всех студентов из таблицы Студенты - Варианты, и удалить там строчки
+            
+            var studentsId = _applicationDbContext.DataBase
+                .StudentVariants.FindStudentsByVariantId(id);
+            
+            if (studentsId.Count() == 0)
+                return Redirect("~/Variants/ShowAllVariants");
+            
+            foreach (var _id in studentsId)
+            {
+                var student = _applicationDbContext.DataBase.Students
+                    .FindById(_id).Split(' ').ToList();
+                if (student[0] != "Не")
+                {
+                    _applicationDbContext.DataBase
+                        .StudentVariantMarks.DeleteStudentsVariant(student[1], student[2], student[3]);
+                }
+            }
             return Redirect("~/Variants/ShowAllVariants");
         }
 
@@ -46,7 +68,7 @@ namespace UI.Controllers.VariantController
         public IActionResult UpdateVariantById()
             => View();
         [HttpPost]
-        public IActionResult UpdateVariantByid(int id, string pathToFile)
+        public IActionResult UpdateVariantByid(string id, string pathToFile)
         {
             _applicationDbContext.DataBase.Variants.UpdateById(id, pathToFile, new CancellationToken());
             return Redirect("~/Variants/ShowAllVariants");

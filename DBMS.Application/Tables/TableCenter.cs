@@ -57,13 +57,13 @@ namespace DBMS.Application.Tables
         }
 
 
-        public string FindById(int id)
+        public string FindById(string id)
         {
             var entity = File.ReadLines(Path)
-                .Where(x => x.Split(' ').ToList().First() == id.ToString());
+                .Where(x => x.Split(' ').ToList().First() == id);
 
             if (entity.Count() == 0)
-                return new string($"Не найдено :( ");
+                return new string($"Не найдено :(");
 
             return entity.First();
         }
@@ -73,19 +73,19 @@ namespace DBMS.Application.Tables
             => File.ReadAllLines(Path).ToList();
         
 
-        public async void DeleteById(int id,
+        public void DeleteById(string id,
             CancellationToken cancellationToken)
         {
-            await File.WriteAllLinesAsync(Path,
+            File.WriteAllLines(Path,
                 File.ReadAllLines(Path)
                 .Where(e => e.Split(' ')
                 .ToList()
-                .First() != id.ToString())
-                .ToList(), cancellationToken);
+                .First() != id)
+                .ToList());
         }
 
         
-        public async void UpdateById(int id, string entity,
+        public async void UpdateById(string id, string entity,
             CancellationToken cancellationToken)
         {
             var allData = File.ReadAllLines(Path);
@@ -93,9 +93,9 @@ namespace DBMS.Application.Tables
             {
                 for (int i = 0; i < allData.Length; i++)
                 {
-                    if (allData[i].Split(' ').First() == id.ToString())
+                    if (allData[i].Split(' ').First() == id)
                     {
-                        allData[i] = id.ToString() + " " + entity;
+                        allData[i] = id + " " + entity;
                         break;
                     }
                 }

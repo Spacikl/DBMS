@@ -40,7 +40,19 @@ namespace UI.Controllers.StudentController
         [HttpPost]
         public IActionResult DeleteStudent(string id)
         {
-            _applicationDbContext.DataBase.Students.DeleteById(int.Parse(id), new CancellationToken());
+            var studentData = _applicationDbContext.DataBase.Students.FindById(id).Split(' ');
+
+            if (studentData[0] == "Не")
+                return Redirect("~/Students/ShowAllStudents");
+
+            var student = studentData[1] + " " + studentData[2] + " " + studentData[3];
+            
+            //удаляем из таблицы студенты
+            _applicationDbContext.DataBase.Students.DeleteById(studentData[0], new CancellationToken());
+            //удаляем из таблицы студенты-варианты
+            _applicationDbContext.DataBase.StudentVariants.DeleteById(studentData[0], new CancellationToken());
+            //удаляем из таблицы студенты-варианты-оценки
+            _applicationDbContext.DataBase.StudentVariantMarks.DeleteStudent(student);
             return Redirect("~/Students/ShowAllStudents");
         }
 
@@ -52,7 +64,7 @@ namespace UI.Controllers.StudentController
         [HttpPost]
         public IActionResult UpdateStudentById(string id, string name, string surname, string patronymic)
         {
-            _applicationDbContext.DataBase.Students.UpdateById(int.Parse(id), name + " " + surname + " " + patronymic, new CancellationToken());
+            _applicationDbContext.DataBase.Students.UpdateById(id, name + " " + surname + " " + patronymic, new CancellationToken());
             return Redirect("~/Students/ShowAllStudents");
         }
 
@@ -65,7 +77,7 @@ namespace UI.Controllers.StudentController
         [HttpPost]
         public IActionResult GetStudentById(string id)
         {
-            var foundStudent = _applicationDbContext.DataBase.Students.FindById(int.Parse(id));
+            var foundStudent = _applicationDbContext.DataBase.Students.FindById(id);
             return View("ShowCurrentStudent", foundStudent);
         }
 

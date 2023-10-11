@@ -147,11 +147,11 @@ namespace Infrastructure
                     var parseStudent = dbStudents[i].Split(' ');
                     var fullname = parseStudent[1] + " " + parseStudent[2] + " " + parseStudent[3];
                     generatedList.Add(parseStudent.First() + " " + parseVar.First());
-                    completedList.Add($"{fullname,-24} | \t {parseVar[1],-24} | \t {0}");
+                    completedList.Add($"{fullname,-40} | \t {parseVar[1],-40} | \t {0}");
                     j++;
                 }
                 File.WriteAllLines(DataBase.StudentVariants.Path, generatedList);
-                File.WriteAllText(DataBase.StudentVariantMarks.Path, "FullName\t\t\t Path to File\t\t\t Mark\n");
+                File.WriteAllText(DataBase.StudentVariantMarks.Path, "FullName\t\t\t\t\t Path to File\t\t\t\t\t Mark\n");
                 File.AppendAllLines(DataBase.StudentVariantMarks.Path, completedList);
             }
         }

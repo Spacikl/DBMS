@@ -79,7 +79,7 @@ namespace DBMS.Domain
                 if (parsedData[0] == surname && parsedData[1] == name
                     && parsedData[2] == patronymic)
                 {   
-                    parsedData[parsedData.Length - 1 - 23] = "Отсутствует";
+                    parsedData[parsedData.Length - 1 - 39] = "----";
                     allData[i] = string.Join(" ", parsedData);
                     break;
                 }
@@ -131,6 +131,19 @@ namespace DBMS.Domain
             }
             File.Delete(Path);
             File.AppendAllLines(Path, allData);
+
+        }
+
+        public string FindStudentByNSP(string student)
+        {
+            var allData = File.ReadAllLines(Path);
+            if (allData == null)
+            {
+                Console.WriteLine("Таблица не сформирована");
+                return string.Empty;
+            }
+            return allData.Where(x => x.Contains(student))
+                            .ToList().First();
 
         }
     }

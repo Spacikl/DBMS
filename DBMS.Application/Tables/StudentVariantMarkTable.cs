@@ -78,8 +78,16 @@ namespace DBMS.Domain
                 var parsedData = allData[i].Split(' ');
                 if (parsedData[0] == surname && parsedData[1] == name
                     && parsedData[2] == patronymic)
-                {   
-                    parsedData[parsedData.Length - 1 - 39] = "----";
+                {
+                    var ind = 0;
+                    while (true)
+                    {
+                        if (parsedData[ind] == "|")
+                            break;
+                        ind++;
+                    }
+
+                    parsedData[ind + 2] = "----";
                     allData[i] = string.Join(" ", parsedData);
                     break;
                 }
@@ -98,9 +106,10 @@ namespace DBMS.Domain
                 var parsedData = allData[i].Split(' ').ToList();
                 if (allData[i].Contains(findByFullName))
                 {
-                    parsedData[0] = parsedUpdatedStudent[0];
-                    parsedData[1] = parsedUpdatedStudent[1];
-                    parsedData[2] = parsedUpdatedStudent[2];
+                    
+                    parsedData[0] = $"{parsedUpdatedStudent[0]}";
+                    parsedData[1] = $"{parsedUpdatedStudent[1]}";
+                    parsedData[2] = $"{parsedUpdatedStudent[2]}";
                     allData[i] = string.Join(" ",parsedData);
                     break;
                 }
@@ -124,7 +133,15 @@ namespace DBMS.Domain
                 if (allData[i].Contains(parsedStudent))
                 {
                     var parsedData = allData[i].Split(' ');
-                    parsedData[parsedData.Length - 1 - 23] = var;
+                    var ind = 0;
+                    while (true)
+                    {
+                        if (parsedData[ind] == "|")
+                            break;
+                        ind++;
+                    }
+
+                    parsedData[ind + 2] = var;
                     allData[i] = string.Join(" ", parsedData);
                     break;
                 }
@@ -137,7 +154,7 @@ namespace DBMS.Domain
         public string FindStudentByNSP(string student)
         {
             var allData = File.ReadAllLines(Path);
-            if (allData == null)
+            if (allData == null || allData.Count() == 1)
             {
                 Console.WriteLine("Таблица не сформирована");
                 return string.Empty;

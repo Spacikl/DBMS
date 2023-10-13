@@ -26,15 +26,22 @@ namespace DBMS.Application.Tables
             {
                 File.Create(Path).Close();
                 if (typeof(T) == typeof(StudentVariantMark))
-                    File.AppendAllText(Path, "FullName\t\t\t Path to File\t\t\t Mark\n");
+                    File.AppendAllText(Path, "FullName\t\t\t\t\t\t\t\t Path to File\t\t\t\t\t\t\t\t Mark\n");
             }
             else UpdateIndex();
         }
 
         private void UpdateIndex()
         {
-            var lastLine = File.ReadAllLines(Path).Last();
-            var id = int.TryParse(lastLine.Split(' ').First(), out int index);
+            
+            var lastLine = File.ReadAllLines(Path);
+            
+            if (lastLine.Length == 0 
+                || ((typeof(T) == typeof(StudentVariantMarkTable) && lastLine.Count() == 1)))
+                return;
+            
+            var lastLineIndex = lastLine.Last();
+            var id = int.TryParse(lastLineIndex.Split(' ').First(), out int index);
             if (id) { 
                 IdIndex = index + 1;
             }

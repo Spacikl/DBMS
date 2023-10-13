@@ -81,10 +81,16 @@ namespace Infrastructure
             Directory.Delete(newDbPath, true);
 
             if (DataBaseList.ContainsKey(newDbPath))
+            { 
                 DataBaseList.Remove(newDbPath);
 
+            }
+
             if (DataBase != null && DataBase.PathToDataBase == newDbPath)
+            { 
+                DataBase.PathToDataBase = null;
                 DataBase = null;
+            }
         }
 
         public void OpenDataBase(string dbName)
@@ -99,9 +105,12 @@ namespace Infrastructure
                 Console.WriteLine("Нельзя восстановить базу данных, которая не существует");
                 return;
             }
-            var db = new DataBase(newDbPath);
-            DataBaseList.Add(newDbPath, db);
-            DataBase = db;
+            if (!DataBaseList.ContainsKey(newDbPath))
+            {
+                var db = new DataBase(newDbPath);
+                DataBaseList.Add(newDbPath, db);
+                DataBase = db;
+            }
         }
 
         public List<string> ShowAllDataBases()
@@ -151,7 +160,7 @@ namespace Infrastructure
                     j++;
                 }
                 File.WriteAllLines(DataBase.StudentVariants.Path, generatedList);
-                File.WriteAllText(DataBase.StudentVariantMarks.Path, "FullName\t\t\t\t\t Path to File\t\t\t\t\t Mark\n");
+                File.WriteAllText(DataBase.StudentVariantMarks.Path, "FullName\t\t\t\t\t\t\t\t Path to File\t\t\t\t\t\t\t\t Mark\n");
                 File.AppendAllLines(DataBase.StudentVariantMarks.Path, completedList);
             }
         }
